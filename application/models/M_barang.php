@@ -76,4 +76,9 @@ class M_barang extends CI_Model
     {
         return $this->db->delete($this->_table, ['kode_barang' => $kode_barang]);
     }
+	    public function graph()
+    {
+        $data = $this->db->query("SELECT nama_barang, stok FROM barang");
+        return $data->result();
+    }
 }
