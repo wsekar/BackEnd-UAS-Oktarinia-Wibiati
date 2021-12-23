@@ -22,6 +22,7 @@ class Dashboard extends CI_Controller
 		$this->data['jumlah_penjualan'] = $this->M_penjualan->jumlah(); //mengambil jumlah penjualan dari method jumlah dalam model M_penjualan
 		$this->data['jumlah_pengguna'] = $this->M_pengguna->jumlah(); //mengambil jumlah pengguna dari method jumlah dalam model M_pengguna
 		$this->data['toko'] = $this->M_toko->lihat(); //mengambil data toko dari lihat dalam model M_toko
+		$this->data['graph'] = $this->M_barang->graph(); //mengambil data graph dari method graph dalam model M_barang
 		$this->load->view('dashboard', $this->data); //load view atau menampilkan halaman dashboard dengan data-data yang telah disebutkan sebelumnya
 	}
 }
