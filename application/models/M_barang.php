@@ -51,25 +51,8 @@ class M_barang extends CI_Model
 
     public function ubah()
     {
-        $post = $this->input->post();
-        $this->kode_barang = $post["kode_barang"]; //kita mengisi $this->id_member dengan id yang didapatkan dari form ($post['id'])
-        $this->nama_barang = $post["nama_barang"];
-        $this->foto_barang = $post["foto_barang"];
-        $this->harga_beli = $post["harga_beli"];
-        $this->harga_jual = $post["harga_jual"];
-        $this->stok = $post["stok"];
-        $this->satuan = $post["satuan"];
-        $this->deskripsi = $post["deskripsi"];
-        return $this->db->update($this->_table, $this, array('kode_barang' => $post['kode_barang']));
-        // return $query;
-
-
-        // 	$query = $this->db->set($data);
-        // 	$query = $this->db->where(['kode_barang' => $kode_barang]);
-        // 	$query = $this->db->update($this->_table);
-        // 	// $this->db->ubah('barang', $data, $condition);
-        // 	// return TRUE;
-        // 	return $query;
+	$this->db->update('barang', $data, $kondisi);
+        return TRUE;
     }
 
     public function hapus($kode_barang)
