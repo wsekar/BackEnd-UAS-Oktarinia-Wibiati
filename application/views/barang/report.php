@@ -25,6 +25,7 @@
 					<td>Harga Beli</td>
 					<td>Harga Jual</td>
 					<td>Stok</td>
+					<td>Deskripsi</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -36,6 +37,7 @@
 						<td>Rp <?= number_format($barang->harga_beli, 0, ',', '.') ?></td>
 						<td>Rp <?= number_format($barang->harga_jual, 0, ',', '.') ?></td>
 						<td><?= $barang->stok ?> <?= strtoupper($barang->satuan) ?></td>
+						<td><?= $barang->deskripsi ?></td>
 					</tr>
 				<?php endforeach ?>
 			</tbody>
