@@ -103,57 +103,32 @@ class Barang extends CI_Controller
             redirect('penjualan');
         }
 
-        $data["barang"] = $this->M_barang->lihat_id('kode_barang');
-        if ($this->input->method() === 'post') {
-            $kode_barang = $this->input->post('kode_barang', TRUE);
-            $nama_barang = $this->input->post('nama_barang', TRUE);
-            $foto_barang = $this->input->post('foto_barang', TRUE);
-            $harga_beli = $this->input->post('harga_beli', TRUE);
-            $harga_jual = $this->input->post('harga_jual', TRUE);
-            $stok = $this->input->post('stok', TRUE);
-            $satuan = $this->input->post('satuan', TRUE);
-            $deskripsi = $this->input->post('deskripsi', TRUE);
-            $path = './assets/images/';
-            $condition = array('kode_barang' => $kode_barang);
-            $config['upload_path']          = './assets/images'; //tempat penyimpanan
-            $config['allowed_types']        = 'jpeg|jpg|png|PNG'; //tipe yang ingin diinsert
-            $config['max_size']             = 10000; //ukuran file maksimal
-            $config['max_width']            = 10000; //lebar maksimal
-            $config['max_height']           = 10000; //tinggi maksimal
-            $config['file_name'] = $_FILES['foto_barang']['name'];
-            $this->upload->initialize($config);
-            if (!empty($_FILES['foto_barang']['name'])) {
-                if ($this->upload->do_upload('foto_barang')) {
-                    $foto_barang = $this->upload->data();
-                    $data = array(
-                        'foto_barang' => $foto_barang['file_name'],
-                        'nama_barang' => $nama_barang,
-                        'harga_beli' => $harga_beli,
-                        'harga_jual' => $harga_jual,
-                        'stok' => $stok,
-                        'satuan' => $satuan,
-                        'deskripsi' => $deskripsi,
-                    );
-                    @unlink($path . $this->input->post('foto_lama'));
+       
+        $kode_barang  = $this->input->post('kode_barang');
+        $nama_barang = $this->input->post('nama_barang');
+        $harga_beli = $this->input->post('harga_beli');
+        $harga_jual = $this->input->post('harga_jual');
+        $stok = $this->input->post('stok');
+        $satuan = $this->input->post('satuan');
+        $deskripsi = $this->input->post('deskripsi');
 
-                    if ($this->M_barang->ubah($data, $kode_barang, $condition)) {
-                        $this->session->set_flashdata('success', 'Data Barang <strong>Berhasil</strong> Diubah!');
-                        redirect('barang');
-                    } else {
-                        $this->session->set_flashdata('error', 'Data Barang <strong>Gagal</strong> Diubah!');
-                        redirect('barang');
-                    }
-                }
-            } else {
+        $path = './assets/images';
 
-                $kode_barang = $this->input->post('kode_barang', TRUE);
-                $nama_barang = $this->input->post('nama_barang', TRUE);
-                $harga_beli = $this->input->post('harga_beli', TRUE);
-                $harga_jual = $this->input->post('harga_jual', TRUE);
-                $stok = $this->input->post('stok', TRUE);
-                $satuan = $this->input->post('satuan', TRUE);
-                $deskripsi = $this->input->post('deskripsi', TRUE);
+        $kondisi = array('kode_barang' => $kode_barang);
+        // get foto
+        $config['upload_path'] = './assets/images';
+        $config['allowed_types'] = 'jpg|png|jpeg|gif';
+        $config['max_size'] = '2048';  //2MB max
+        $config['max_width'] = '4480'; // pixel
+        $config['max_height'] = '4480'; // pixel
+        $config['file_name'] = $_FILES['foto_barang']['name'];
+
+        $this->upload->initialize($config);
+        if (!empty($_FILES['foto_barang']['name'])) {
+            if ($this->upload->do_upload('foto_barang')) {
+                $foto_barang = $this->upload->data();
                 $data = array(
+                    'foto_barang' => $foto_barang['file_name'],
                     'nama_barang' => $nama_barang,
                     'harga_beli' => $harga_beli,
                     'harga_jual' => $harga_jual,
@@ -161,15 +136,36 @@ class Barang extends CI_Controller
                     'satuan' => $satuan,
                     'deskripsi' => $deskripsi,
                 );
+                // hapus foto pada direktori
                 @unlink($path . $this->input->post('foto_lama'));
-                if ($this->M_barang->ubah($data, $kode_barang, $condition)) {
-                    $this->session->set_flashdata('success', 'Data Barang <strong>Berhasil</strong> Diubah!');
-                    redirect('barang');
-                } else {
-                    $this->session->set_flashdata('error', 'Data Barang <strong>Gagal</strong> Diubah!');
-                    redirect('barang');
-                }
+
+                $this->M_barang->ubah($data, $kondisi);
+                $this->session->set_flashdata('success', 'Data Barang <strong>Berhasil</strong> Diubah!');
+                redirect('barang');
+            } else {
+                $this->session->set_flashdata('error', 'Data Barang <strong>Gagal</strong> Dihapus!');
+                redirect('barang');
             }
+        } else {
+            $nama_barang = $this->input->post('nama_barang', TRUE);
+            $harga_beli = $this->input->post('harga_beli', TRUE);
+            $harga_jual = $this->input->post('harga_jual', TRUE);
+            $stok = $this->input->post('stok', TRUE);
+            $satuan = $this->input->post('satuan', TRUE);
+            $deskripsi = $this->input->post('deskripsi', TRUE);
+            $data = array(
+                'nama_barang' => $nama_barang,
+                'harga_beli' => $harga_beli,
+                'harga_jual' => $harga_jual,
+                'stok' => $stok,
+                'satuan' => $satuan,
+                'deskripsi' => $deskripsi,
+            );
+            @unlink($path . $this->input->post('foto_lama'));
+
+            $this->M_barang->ubah($data, $kondisi);
+            $this->session->set_flashdata('success', 'Data Barang <strong>Berhasil</strong> Diubah!');
+            redirect('barang');
         }
     }
 
